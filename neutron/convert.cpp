@@ -261,14 +261,6 @@ T swap_tof_related_labels_and_attrs(T &&x, const Dim from, const Dim to) {
         x.labels().erase(field);
       }
     }
-  }
-  if (to == Dim::Tof) {
-    for (const auto &field : fields) {
-      if (x.attrs().contains(field)) {
-        x.labels().set(field, x.attrs()[field]);
-        x.attrs().erase(field);
-        if constexpr (std::is_same_v<std::decay_t<T>, Dataset>) {
-          for (const auto &item : iter(x)) {
             expect::equals(x.labels()[field], item.attrs()[field]);
             item.attrs().erase(field);
           }
