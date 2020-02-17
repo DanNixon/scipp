@@ -122,8 +122,11 @@ stages:
         pool:
           vmImage: 'ubuntu-latest'
         steps:
-          - script: echo 'todo'
-            displayName: 'TODO'
+          - script: |
+              curl --request POST --data 'branches=master' --data "token=$READTHEDOCS_TOKEN" 'https://readthedocs.org/api/v2/webhook/scipp/94775/'
+            env:
+              READTHEDOCS_TOKEN: $(readthedocs_token_secret)
+            displayName: 'Trigger RTD build'
 
       - job: 'docker'
         displayName: 'Docker'
