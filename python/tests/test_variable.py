@@ -680,6 +680,10 @@ def test_sum():
     assert sc.is_equal(sc.sum(var, 'y'), expected)
 
 
+def test_nansum():
+    assert_export(sc.nansum, sc.Variable())
+
+
 def test_sum_in_place():
     var = sc.Variable(dims=['x', 'y'],
                       values=np.array([[0.1, 0.3], [0.2, 0.6]]),

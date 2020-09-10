@@ -21,9 +21,21 @@ constexpr auto add_inplace_types =
              std::tuple<double, int64_t>, std::tuple<double, int32_t>,
              std::tuple<float, int64_t>, std::tuple<float, int32_t>,
              std::tuple<int64_t, bool>>;
+constexpr auto nanadd_inplace_types =
+    arg_list<double, float, int64_t, int32_t, std::tuple<double, float>,
+             std::tuple<float, double>, std::tuple<int64_t, int32_t>,
+             std::tuple<int32_t, int64_t>, std::tuple<double, int64_t>,
+             std::tuple<double, int32_t>, std::tuple<float, int64_t>,
+             std::tuple<float, int32_t>>;
 
 constexpr auto plus_equals =
     overloaded{add_inplace_types, [](auto &&a, const auto &b) { a += b; }};
+constexpr auto nanplus_equals =
+    overloaded{nanadd_inplace_types, [](auto &&a, const auto &b) {
+                 using std::isnan;
+                 if (!isnan(b))
+                   a += b;
+               }};
 constexpr auto minus_equals =
     overloaded{add_inplace_types, [](auto &&a, const auto &b) { a -= b; }};
 

@@ -20,6 +20,11 @@ TEST_F(ElementArithmeticTest, plus_equals) {
   EXPECT_EQ(val, a + b);
 }
 
+TEST_F(ElementArithmeticTest, nanplus_equals) {
+  nanplus_equals(val, NAN);
+  EXPECT_EQ(val, a);
+}
+
 TEST_F(ElementArithmeticTest, minus_equals) {
   minus_equals(val, b);
   EXPECT_EQ(val, a - b);

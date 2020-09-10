@@ -19,6 +19,11 @@ flatten(const VariableConstView &var, const Dim dim);
                                                  const Dim dim);
 SCIPP_VARIABLE_EXPORT VariableView sum(const VariableConstView &var,
                                        const Dim dim, const VariableView &out);
+[[nodiscard]] SCIPP_VARIABLE_EXPORT Variable
+nansum(const VariableConstView &var, const Dim dim);
+SCIPP_VARIABLE_EXPORT VariableView nansum(const VariableConstView &var,
+                                          const Dim dim,
+                                          const VariableView &out);
 
 // Logical reductions
 [[nodiscard]] SCIPP_VARIABLE_EXPORT Variable any(const VariableConstView &var);

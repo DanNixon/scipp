@@ -84,6 +84,42 @@ VariableView sum(const VariableConstView &var, const Dim dim,
   return out;
 }
 
+void nansum_impl(const VariableView &summed, const VariableConstView &var) {
+  if (contains_events(var))
+    throw except::TypeError("`nansum` can only be used for dense data, use "
+                            "`flatten` for event data.");
+  accumulate_in_place(summed, var, element::nanplus_equals);
+}
+
+Variable nansum(const VariableConstView &var, const Dim dim) {
+  auto dims = var.dims();
+  dims.erase(dim);
+  // Bool DType is a bit special in that it cannot contain it's sum.
+  // Instead the sum is stored in a int64_t Variable
+  Variable summed{var.dtype() == dtype<bool>
+                      ? makeVariable<int64_t>(Dimensions(dims))
+                      : Variable(var, dims)};
+  nansum_impl(summed, var);
+  return summed;
+}
+
+VariableView nansum(const VariableConstView &var, const Dim dim,
+                    const VariableView &out) {
+  if (var.dtype() == dtype<bool> && out.dtype() != dtype<int64_t>)
+    throw except::UnitError("In-place sum of Bool dtype must be stored in an "
+                            "output variable of Int64 dtype.");
+
+  auto dims = var.dims();
+  dims.erase(dim);
+  if (dims != out.dims())
+    throw except::DimensionError(
+        "Output argument dimensions must be equal to input dimensions without "
+        "the summing dimension.");
+
+  nansum_impl(out, var);
+  return out;
+}
+
 Variable mean_impl(const VariableConstView &var, const Dim dim,
                    const VariableConstView &masks_sum) {
   auto summed = sum(var, dim);

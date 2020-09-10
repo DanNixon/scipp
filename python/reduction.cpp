@@ -56,6 +56,15 @@ template <class T> void bind_sum_out(py::module &m) {
       py::call_guard<py::gil_scoped_release>());
 }
 
+template <class T> void bind_nansum(py::module &m) {
+  m.def(
+      "sum",
+      [](const typename T::const_view_type &x, const Dim dim) {
+        return nansum(x, dim);
+      },
+      py::arg("x"), py::arg("dim"), py::call_guard<py::gil_scoped_release>());
+}
+
 template <class T> void bind_min(py::module &m) {
   m.def(
       "min", [](const typename T::const_view_type &x) { return min(x); },
@@ -142,6 +151,7 @@ void init_reduction(py::module &m) {
   bind_sum<DataArray>(m);
   bind_sum<Dataset>(m);
   bind_sum_out<Variable>(m);
+  bind_nansum<Variable>(m);
 
   bind_min<Variable>(m);
   bind_max<Variable>(m);

@@ -53,6 +53,20 @@ def sum(x, dim, out=None):
     return _call_cpp_func(_cpp.sum, x, dim, out=out)
 
 
+def nansum(x, dim, out=None):
+    """Element-wise sum over the specified dimension ignoring not a number
+    values.
+
+    :param x: Input data.
+    :param dim: Dimension along which to calculate the sum.
+    :param out: Optional output buffer.
+    :raises: If the dimension does not exist, or the dtype cannot be summed,
+             e.g., if it is a string.
+    :return: The sum of the input values.
+    """
+    return _call_cpp_func(_cpp.nansum, x, dim, out=out)
+
+
 def min(x, dim=None, out=None):
     """Element-wise min over the specified dimension or all dimensions if not
     provided.
